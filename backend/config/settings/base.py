@@ -8,7 +8,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-change-me")
 DEBUG = config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,.railway.app,healthcheck.railway.app", cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,.railway.app", cast=Csv())
+
+# Always allow Railway healthcheck hostname regardless of ALLOWED_HOSTS env var value
+RAILWAY_REQUIRED_HOSTS = [".railway.app", "healthcheck.railway.app"]
+for host in RAILWAY_REQUIRED_HOSTS:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
 
 INSTALLED_APPS = [
     # Django built-ins
