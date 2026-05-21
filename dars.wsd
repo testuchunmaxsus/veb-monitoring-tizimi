@@ -1,0 +1,75 @@
+// Enum – barcha mumkin bo‘lgan holatlar
+enum OrderStatus {
+    NEW,              // Yangi holat
+    UNDER_REVIEW,     // Ko‘rib chiqilmoqda
+    APPROVED,         // Tasdiqlangan
+    SHIPPING,         // Yetkazilmoqda
+    COMPLETED,        // Yakunlangan
+    CANCELLED         // Bekor qilingan
+}
+ 
+class Order {
+    // Asosiy holat atributi – holat diagrammasidan
+    private OrderStatus status;
+    private DateTime    createdAt;
+    private DateTime    statusChangedAt;
+    private String      cancelReason;  // Bekor qilinganda sabab
+ 
+    // Guard shartlar – holat diagrammasidagi [] shartlardan
+    public boolean canBeApproved() {
+        return status == OrderStatus.UNDER_REVIEW
+               && hasEnoughStock();
+    }
+ 
+    public boolean canBeCancelled() {
+        return status != OrderStatus.COMPLETED
+               && status != OrderStatus.CANCELLED;
+    }
+ 
+    // O‘tish metodlari – holat o‘zgartiradigan metodlar
+    public void placeOrder() {
+        validateState(OrderStatus.NEW);  // Oldingi shart
+        this.status = OrderStatus.UNDER_REVIEW;
+        this.statusChangedAt = DateTime.now();
+        notifyAdmin();  // Entry harakat
+    }
+ 
+    public void approve() {
+        if (!canBeApproved())                        // Guard shart
+            throw new InvalidStateException(...);
+        reserveItems();                              // Harakat
+        this.status = OrderStatus.APPROVED;
+        this.statusChangedAt = DateTime.now();
+        sendConfirmationEmail();                     // Exit harakat
+    }
+ 
+    public void ship() {
+        validateState(OrderStatus.APPROVED);
+        this.status = OrderStatus.SHIPPING;
+        this.statusChangedAt = DateTime.now();
+        notifyCustomer(‘Buyurtmangiz yo\’lda!’);
+    }
+ 
+    public void confirmDelivery() {
+        validateState(OrderStatus.SHIPPING);
+        this.status = OrderStatus.COMPLETED;
+        this.statusChangedAt = DateTime.now();
+    }
+ 
+    public void cancel(String reason) {
+        if (!canBeCancelled())
+            throw new InvalidStateException(‘Bekor qilib bo\’lmaydi!’);
+        releaseReservedItems();                      // Harakat
+        this.cancelReason = reason;
+        this.status = OrderStatus.CANCELLED;
+        this.statusChangedAt = DateTime.now();
+        sendCancellationEmail();
+    }
+ 
+    // Yordamchi metod
+    private void validateState(OrderStatus expected) {
+        if (this.status != expected)
+            throw new InvalidStateException(
+                ‘Kutilgan holat: ‘ + expected + ‘, hozirgi: ‘ + this.status);
+    }
+}

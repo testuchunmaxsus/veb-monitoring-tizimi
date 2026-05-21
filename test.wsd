@@ -1,0 +1,16 @@
+@startuml
+class User {
+  +name
+  +email
+  +login()
+}
+
+class Account {
+  +id
+  +balance
+  +deposit()
+  +withdraw()
+}
+
+User --> Account : owns
+@enduml

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tracker demo sahifa</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; }
+      h1 { color: #2563eb; }
+      .box { padding: 20px; background: #f3f4f6; border-radius: 8px; margin: 20px 0; }
+      button { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <h1>Tracker demo sahifa</h1>
+    <p>Bu sahifa <code>tracker.min.js</code>'ni sinash uchun ishlatiladi.</p>
+    <div class="box">
+      <p>Tracker quyidagilarni yig'ishi kerak:</p>
+      <ul>
+        <li>Sahifa ko'rishi (page view)</li>
+        <li>Klik hodisalari</li>
+        <li>Form yuborish</li>
+        <li>Performance metrikalari (LCP, FCP)</li>
+      </ul>
+    </div>
+    <button onclick="alert('Klik!')">Test tugma</button>
+
+    <!-- Tracker Bosqich 5 da to'liq ishlaydi -->
+    <script
+      async
+      src="../dist/tracker.min.js"
+      data-api-key="vmt_demo_key"
+      data-endpoint="http://localhost:8000/api/v1/track"
+    ></script>
+  </body>
+</html>

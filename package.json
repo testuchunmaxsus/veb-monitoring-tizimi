@@ -1,0 +1,16 @@
+{
+  "name": "veb-monitoring-tizimi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Veb-sayt faoliyatini monitoring va tahlil qilish axborot tizimi",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && venv\\Scripts\\activate && daphne -b 0.0.0.0 -p 8000 config.asgi:application",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:tracker": "cd tracker && npm run build",
+    "install:all": "cd frontend && npm install && cd ../tracker && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
