@@ -19,4 +19,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py create_superuser_if_none && daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py create_superuser_if_none && python manage.py seed && daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"]
