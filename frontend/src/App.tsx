@@ -20,15 +20,6 @@ function Protected({ children }: { children: ReactNode }) {
   );
 }
 
-function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2">{title}</h1>
-      <p className="text-gray-500">Bu sahifa keyingi bosqichlarda to'ldiriladi.</p>
-    </div>
-  );
-}
-
 export default function App() {
   return (
     <Routes>
