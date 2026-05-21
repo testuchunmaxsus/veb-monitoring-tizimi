@@ -1,14 +1,15 @@
+[variables]
+DJANGO_SETTINGS_MODULE = "config.settings.prod"
+
 [phases.setup]
-nixPkgs = ["python311"]
+nixPkgs = ["python311", "gcc"]
+aptPkgs = ["libpq-dev"]
 
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["python -m pip install --upgrade pip && pip install -r requirements.txt"]
 
 [phases.build]
-cmds = [
-    "python manage.py collectstatic --noinput",
-    "python manage.py migrate --noinput"
-]
+cmds = ["python manage.py collectstatic --noinput"]
 
 [start]
-cmd = "daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"
+cmd = "python manage.py migrate --noinput && python manage.py create_superuser_if_none && daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"
